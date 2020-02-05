@@ -6,12 +6,12 @@ import (
 )
 
 // GetHTML gets HTML content of a given url
-func GetHTML(url string) (string, error) {
+func GetHTML(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer resp.Body.Close()
 	html, err := ioutil.ReadAll(resp.Body)
-	return string(html), err
+	return html, err
 }

@@ -20,4 +20,14 @@ func main() {
 	for _, stock := range stocks {
 		fmt.Println(stock)
 	}
+	url = "https://s.cafef.vn/ajax/StockChartV3.ashx?symbol=VRE"
+	html, err = crawler.GetHTML(url)
+	if err != nil {
+		panic(err)
+	}
+	lifeTimePrices, err := parser.ParseStockLifeTimePrice(html)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(lifeTimePrices)
 }
