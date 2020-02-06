@@ -2,9 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/iamquang95/stockterm/core/crawler"
 	"github.com/iamquang95/stockterm/core/parser"
+
+	ui "github.com/gizak/termui/v3"
+	"github.com/gizak/termui/v3/widgets"
 )
 
 func main() {
@@ -30,4 +34,21 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(lifeTimePrices)
+
+	if err := ui.Init(); err != nil {
+		log.Fatalf("failed to initialize termui: %v", err)
+	}
+	defer ui.Close()
+
+	p := widgets.NewParagraph()
+	p.Text = "Hello World!"
+	p.SetRect(0, 0, 25, 5)
+
+	ui.Render(p)
+
+	for e := range ui.PollEvents() {
+		if e.Type == ui.KeyboardEvent {
+			break
+		}
+	}
 }
