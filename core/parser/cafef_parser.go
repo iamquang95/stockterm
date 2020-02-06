@@ -8,9 +8,9 @@ import (
 
 // ParseListStock parses http response from cafef to an array of Stock
 // http://banggia.cafef.vn/stockhandler.ashx
-func ParseListStock(resp []byte) ([]schema.Stock, error) {
-	var stocks []schema.Stock
-	err := json.Unmarshal(resp, &stocks)
+func ParseListStock(resp []byte) ([]*schema.Stock, error) {
+	var stocks []*schema.Stock
+	err := json.Unmarshal(resp, stocks)
 	if err != nil {
 		return nil, err
 	}
