@@ -10,4 +10,5 @@ type DataCenter interface {
 	GetStockLifeTimePrice(string) (*schema.StockLifeTimePrice, error)
 	FetchData() error
 	ModifyWatchingStock([]string) error
+	GetWatchingStock() []string
 }

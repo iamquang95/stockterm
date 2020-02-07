@@ -2,8 +2,6 @@ package main
 
 import (
 	"log"
-	"math"
-	"time"
 
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
@@ -15,102 +13,54 @@ func main() {
 	}
 	defer ui.Close()
 
-	sinFloat64 := (func() []float64 {
-		n := 400
-		data := make([]float64, n)
-		for i := range data {
-			data[i] = 1 + math.Sin(float64(i)/5)
-		}
-		return data
-	})()
-
-	sl := widgets.NewSparkline()
-	sl.Data = sinFloat64[:100]
-	sl.LineColor = ui.ColorCyan
-	sl.TitleStyle.Fg = ui.ColorWhite
-
-	slg := widgets.NewSparklineGroup(sl)
-	slg.Title = "Sparkline"
-
-	lc := widgets.NewPlot()
-	lc.Title = "braille-mode Line Chart"
-	lc.Data = append(lc.Data, sinFloat64)
-	lc.AxesColor = ui.ColorWhite
-	lc.LineColors[0] = ui.ColorYellow
-
-	gs := make([]*widgets.Gauge, 3)
-	for i := range gs {
-		gs[i] = widgets.NewGauge()
-		gs[i].Percent = i * 10
-		gs[i].BarColor = ui.ColorRed
+	table1 := widgets.NewTable()
+	table1.Rows = [][]string{
+		[]string{"header1", "header2", "header3"},
+		[]string{"你好吗", "Go-lang is so cool", "Im working on Ruby"},
+		[]string{"2016", "10", "11"},
 	}
+	table1.TextStyle = ui.NewStyle(ui.ColorWhite)
+	table1.SetRect(0, 0, 60, 10)
 
-	ls := widgets.NewList()
-	ls.Rows = []string{
-		"[1] Downloading File 1",
-		"",
-		"",
-		"",
-		"[2] Downloading File 2",
-		"",
-		"",
-		"",
-		"[3] Uploading File 3",
+	ui.Render(table1)
+
+	table2 := widgets.NewTable()
+	table2.Rows = [][]string{
+		[]string{"header1", "header2", "header3"},
+		[]string{"Foundations", "Go-lang is so cool", "Im working on Ruby"},
+		[]string{"2016", "11", "11"},
 	}
-	ls.Border = false
+	table2.TextStyle = ui.NewStyle(ui.ColorWhite)
+	table2.TextAlignment = ui.AlignCenter
+	table2.RowSeparator = false
+	table2.SetRect(0, 10, 20, 20)
 
-	p := widgets.NewParagraph()
-	p.Text = "<> This row has 3 columns\n<- Widgets can be stacked up like left side\n<- Stacked widgets are treated as a single widget"
-	p.Title = "Demonstration"
+	ui.Render(table2)
 
-	grid := ui.NewGrid()
-	termWidth, termHeight := ui.TerminalDimensions()
-	grid.SetRect(0, 0, termWidth, termHeight)
+	table3 := widgets.NewTable()
+	table3.Rows = [][]string{
+		[]string{"header1", "header2", "header3"},
+		[]string{"AAA", "BBB", "CCC"},
+		[]string{"DDD", "EEE", "FFF"},
+		[]string{"GGG", "HHH", "III"},
+	}
+	table3.TextStyle = ui.NewStyle(ui.ColorWhite)
+	table3.RowSeparator = true
+	table3.BorderStyle = ui.NewStyle(ui.ColorGreen)
+	table3.SetRect(0, 30, 70, 20)
+	table3.FillRow = true
+	table3.RowStyles[0] = ui.NewStyle(ui.ColorWhite, ui.ColorBlack, ui.ModifierBold)
+	table3.RowStyles[2] = ui.NewStyle(ui.ColorWhite, ui.ColorRed, ui.ModifierBold)
+	table3.RowStyles[3] = ui.NewStyle(ui.ColorYellow)
 
-	grid.Set(
-		ui.NewRow(1.0/2,
-			ui.NewCol(1.0/2, slg),
-			ui.NewCol(1.0/2, lc),
-		),
-		ui.NewRow(1.0/2,
-			ui.NewCol(1.0/4, ls),
-			ui.NewCol(1.0/4,
-				ui.NewRow(.9/3, gs[0]),
-				ui.NewRow(.9/3, gs[1]),
-				ui.NewRow(1.2/3, gs[2]),
-			),
-			ui.NewCol(1.0/2, p),
-		),
-	)
+	ui.Render(table3)
 
-	ui.Render(grid)
-
-	tickerCount := 1
 	uiEvents := ui.PollEvents()
-	ticker := time.NewTicker(time.Second).C
 	for {
-		select {
-		case e := <-uiEvents:
-			switch e.ID {
-			case "q", "<C-c>":
-				return
-			case "<Resize>":
-				payload := e.Payload.(ui.Resize)
-				grid.SetRect(0, 0, payload.Width, payload.Height)
-				ui.Clear()
-				ui.Render(grid)
-			}
-		case <-ticker:
-			if tickerCount == 100 {
-				return
-			}
-			for _, g := range gs {
-				g.Percent = (g.Percent + 3) % 100
-			}
-			slg.Sparklines[0].Data = sinFloat64[tickerCount : tickerCount+100]
-			lc.Data[0] = sinFloat64[2*tickerCount:]
-			ui.Render(grid)
-			tickerCount++
+		e := <-uiEvents
+		switch e.ID {
+		case "q", "<C-c>":
+			return
 		}
 	}
 }

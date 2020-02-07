@@ -67,3 +67,7 @@ func (dc *StockDataCenter) ModifyWatchingStock(newWatchings []string) error {
 	err := dc.FetchData()
 	return err
 }
+
+func (dc *StockDataCenter) GetWatchingStock() []string {
+	return dc.watchingStocks
+}

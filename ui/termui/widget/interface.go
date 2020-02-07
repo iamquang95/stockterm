@@ -7,5 +7,5 @@ import (
 // Widget wrap a termui widget with UpdateData function
 type Widget interface {
 	GetWidget() interface{}
-	UpdateData(datacenter.DataCenter)
+	UpdateData(datacenter.DataCenter) error
 }
