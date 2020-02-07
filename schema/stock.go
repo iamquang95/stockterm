@@ -6,7 +6,7 @@ type Stock struct {
 	OpenPrice  float32 `json:"b"`
 	CeilPrice  float32 `json:"c"`
 	FloorPrice float32 `json:"d"`
-	Price      float32 `json:"i"`
+	Price      float32 `json:"l"`
 }
 
 // StockLifeTimePrice decribes a life time price of a stock

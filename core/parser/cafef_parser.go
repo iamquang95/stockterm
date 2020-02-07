@@ -9,12 +9,17 @@ import (
 // ParseListStock parses http response from cafef to an array of Stock
 // http://banggia.cafef.vn/stockhandler.ashx
 func ParseListStock(resp []byte) ([]*schema.Stock, error) {
-	var stocks []*schema.Stock
-	err := json.Unmarshal(resp, stocks)
+	var stocks []schema.Stock
+	err := json.Unmarshal(resp, &stocks)
 	if err != nil {
 		return nil, err
 	}
-	return stocks, nil
+	var stockRefs []*schema.Stock
+	for _, stock := range stocks {
+		s := stock
+		stockRefs = append(stockRefs, &s)
+	}
+	return stockRefs, nil
 }
 
 type stockLifeTimePrice struct {

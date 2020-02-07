@@ -18,15 +18,15 @@ func NewStockListWidget() Widget {
 	table.TextStyle = ui.NewStyle(ui.ColorWhite)
 	table.RowSeparator = true
 	table.BorderStyle = ui.NewStyle(ui.ColorWhite)
-	table.SetRect(0, 30, 70, 20)
 	table.FillRow = true
+	table.Title = "Stocks price"
 	table.RowStyles[0] = ui.NewStyle(ui.ColorWhite, ui.ColorBlack, ui.ModifierBold)
 	return &StockListWidget{
 		table: table,
 	}
 }
 
-func (w *StockListWidget) GetWidget() interface{} {
+func (w *StockListWidget) GetWidget() ui.Drawable {
 	return w.table
 }
 
@@ -44,9 +44,12 @@ func (w *StockListWidget) UpdateData(dc datacenter.DataCenter) error {
 		if !ok {
 			return fmt.Errorf("Don't have data for %s", code)
 		}
+		diff := stock.Price - stock.OpenPrice
 		entry := []string{
 			stock.Name,
 			floatToString(stock.Price),
+			floatToString(diff),
+			floatToString(diff/stock.OpenPrice*100) + "%",
 		}
 		dataRows = append(dataRows, entry)
 		w.table.RowStyles[idx+1] = getRowStyle(stock)
@@ -60,7 +63,7 @@ func floatToString(x float32) string {
 }
 
 func getTableHeader() []string {
-	return []string{"Code", "Price"}
+	return []string{"Code", "Price", "+/-", "%"}
 }
 
 func getRowStyle(stock *schema.Stock) ui.Style {

@@ -17,7 +17,7 @@ type StockDataCenter struct {
 func NewStockDataCenter(watchingStocks []string) DataCenter {
 	dc := &StockDataCenter{
 		stockList:         nil,
-		lifeTimePricesMap: nil,
+		lifeTimePricesMap: make(map[string]*schema.StockLifeTimePrice),
 		watchingStocks:    watchingStocks,
 	}
 	dc.FetchData()
@@ -47,18 +47,18 @@ func (dc *StockDataCenter) FetchData() error {
 	}
 	dc.stockList = stocks
 	// TODO: using channel to concurrent get these data
-	for _, stock := range dc.watchingStocks {
-		url := "https://s.cafef.vn/ajax/StockChartV3.ashx?symbol=" + stock
-		resp, err = crawler.GetHTML(url)
-		if err != nil {
-			return err
-		}
-		lifeTimePrice, err := parser.ParseStockLifeTimePrice(resp)
-		if err != nil {
-			return err
-		}
-		dc.lifeTimePricesMap[stock] = lifeTimePrice
-	}
+	// for _, stock := range dc.watchingStocks {
+	// 	url := "https://s.cafef.vn/ajax/StockChartV3.ashx?symbol=" + stock
+	// 	resp, err = crawler.GetHTML(url)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	lifeTimePrice, err := parser.ParseStockLifeTimePrice(resp)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	dc.lifeTimePricesMap[stock] = lifeTimePrice
+	// }
 	return nil
 }
 
