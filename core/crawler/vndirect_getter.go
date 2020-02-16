@@ -6,7 +6,6 @@ import (
 )
 
 func GetStockDetail(code string, date time.Time) ([]byte, error) {
-	fmt.Println(date)
 	dateFormat := "2006-01-02"
 	limit := 1000
 	url := fmt.Sprintf(
@@ -24,4 +23,15 @@ func GetStockDetail(code string, date time.Time) ([]byte, error) {
 	)
 	data, err := GetHTML(url)
 	return data, err
+}
+
+func GetLastTradeDayStockDetail(code string) ([]byte, time.Time, error) {
+	t := time.Now()
+	if (t.Weekday() == time.Sunday) {
+		t = t.AddDate(0, 0, -2)
+	} else if (t.Weekday() == time.Saturday) {
+		t = t.AddDate(0, 0, -1)
+	}
+	resp, err :=  GetStockDetail(code, t)
+	return resp, t, err
 }

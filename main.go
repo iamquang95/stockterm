@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"github.com/iamquang95/stockterm/core/crawler"
 	"github.com/iamquang95/stockterm/core/parser"
-	"time"
 )
 
 func main() {
 	//terminalui.Render()
-	date := time.Date(2020, time.February, 7, 1, 1, 1, 1, time.UTC)
-	resp, err := crawler.GetStockDetail("ITA", date)
+	resp, date, err := crawler.GetLastTradeDayStockDetail("ITA")
 	if err != nil {
 		panic(err)
 	}
