@@ -6,8 +6,7 @@ import (
 
 // DataCenter is a center place that store stock data
 type DataCenter interface {
-	GetStockList() []*schema.Stock
-	GetStockLifeTimePrice(string) (*schema.StockLifeTimePrice, error)
+	GetStockList() []schema.StockToday
 	FetchData() error
 	ModifyWatchingStock([]string) error
 	GetWatchingStock() []string

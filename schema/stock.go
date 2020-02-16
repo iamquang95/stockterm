@@ -1,6 +1,7 @@
 package schema
 
-// Stock describes a stock data, json based on cafef data
+import "time"
+
 type Stock struct {
 	Name       string  `json:"a"`
 	OpenPrice  float32 `json:"b"`
@@ -9,17 +10,7 @@ type Stock struct {
 	Price      float32 `json:"l"`
 }
 
-// StockLifeTimePrice decribes a life time price of a stock
-// Prices is price at end of the day of this stock per day
-// RealTimePrices shows the price adjustment of this stock on the last day
-type StockLifeTimePrice struct {
-	Prices         []PriceAtEpoch
-	RealTimePrices []PriceAtEpoch
-}
-
-// PriceAtEpoch describes a stock price at an epoch with total amount
-type PriceAtEpoch struct {
-	Epoch  int
-	Price  float32
-	Amount float32
+type StockToday struct {
+	Stock Stock
+	Prices map[time.Time]float32
 }

@@ -6,7 +6,7 @@ import (
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
 	"github.com/iamquang95/stockterm/schema"
-	"github.com/iamquang95/stockterm/ui/termui/datacenter"
+	"github.com/iamquang95/stockterm/ui/terminalui/datacenter"
 )
 
 type StockListWidget struct {
@@ -37,12 +37,12 @@ func (w *StockListWidget) UpdateData(dc datacenter.DataCenter) error {
 	stockList := dc.GetStockList()
 	stockMap := make(map[string]*schema.Stock)
 	for _, stock := range stockList {
-		stockMap[stock.Name] = stock
+		stockMap[stock.Stock.Name] = &stock.Stock
 	}
 	for idx, code := range dc.GetWatchingStock() {
 		stock, ok := stockMap[code]
 		if !ok {
-			return fmt.Errorf("Don't have data for %s", code)
+			return fmt.Errorf("don't have data for %s", code)
 		}
 		diff := stock.Price - stock.OpenPrice
 		entry := []string{

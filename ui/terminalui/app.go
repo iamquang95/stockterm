@@ -1,12 +1,12 @@
-package termui
+package terminalui
 
 import (
 	"log"
 	"time"
 
 	ui "github.com/gizak/termui/v3"
-	"github.com/iamquang95/stockterm/ui/termui/datacenter"
-	"github.com/iamquang95/stockterm/ui/termui/widget"
+	"github.com/iamquang95/stockterm/ui/terminalui/datacenter"
+	"github.com/iamquang95/stockterm/ui/terminalui/widget"
 )
 
 type MainApp struct {
@@ -50,7 +50,7 @@ func Render() {
 
 func initMainApp(watchingStocks []string) *MainApp {
 	if err := ui.Init(); err != nil {
-		log.Fatalf("failed to initialize termui: %v", err)
+		log.Fatalf("failed to initialize terminalui: %v", err)
 	}
 	dc := datacenter.NewStockDataCenter(watchingStocks)
 	stockList := widget.NewStockListWidget()
