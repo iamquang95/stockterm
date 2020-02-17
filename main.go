@@ -2,16 +2,22 @@ package main
 
 import (
 	"fmt"
-	"github.com/iamquang95/stockterm/core/crawler"
+	"github.com/iamquang95/stockterm/ui/terminalui/datacenter"
 )
 
 func main() {
 	//terminalui.Render()
-	x, err := crawler.GetLastTradeDayStockDetail("ITA")
+	dc, err := datacenter.NewStockDataCenter([]string{"ITA"})
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(x)
+	fmt.Println(dc)
+	fmt.Println("----------------------------------")
+	err = dc.FetchData()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(dc.GetStockList())
 	// resp, err := crawler.GetHTML("http://banggia.cafef.vn/stockhandler.ashx")
 	// if err != nil {
 	// 	panic(err)
