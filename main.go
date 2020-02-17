@@ -3,16 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/iamquang95/stockterm/core/crawler"
-	"github.com/iamquang95/stockterm/core/parser"
 )
 
 func main() {
 	//terminalui.Render()
-	resp, date, err := crawler.GetLastTradeDayStockDetail("ITA")
-	if err != nil {
-		panic(err)
-	}
-	x, err := parser.ParseInDayStockData(date, resp)
+	x, err := crawler.GetLastTradeDayStockDetail("ITA")
 	if err != nil {
 		panic(err)
 	}

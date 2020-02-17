@@ -3,17 +3,19 @@ package parser
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/iamquang95/stockterm/schema"
+	"sort"
 	"time"
 )
 
-func ParseInDayStockData(date time.Time, resp []byte) (map[time.Time]float32, error) {
+func ParseInDayStockData(date time.Time, resp []byte) ([]schema.PriceAtTime, error) {
 	fmt.Println(string(resp))
 	data := &dataStruct{}
 	err := json.Unmarshal(resp, data)
 	if err != nil {
 		return nil, err
 	}
-	res := make(map[time.Time]float32)
+	res := make([]schema.PriceAtTime, 0)
 	hits := data.Data.Hits
 	for _, kv := range hits {
 		t, err := time.Parse("15:04:05", kv.Source.Time)
@@ -21,9 +23,15 @@ func ParseInDayStockData(date time.Time, resp []byte) (map[time.Time]float32, er
 			return nil, err
 		}
 		timestamp := time.Date(date.Year(), date.Month(), date.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), time.Local)
-		res[timestamp] = kv.Source.Last
+		res = append(res, schema.PriceAtTime{
+			Price: kv.Source.Last,
+			Time:  timestamp,
+		})
 		fmt.Println(kv.Source)
 	}
+	sort.Slice(res, func(l, r int) bool {
+		return res[l].Time.Before(res[r].Time)
+	})
 	return res, nil
 }
 

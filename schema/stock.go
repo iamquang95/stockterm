@@ -11,6 +11,11 @@ type Stock struct {
 }
 
 type StockToday struct {
-	Stock Stock
-	Prices map[time.Time]float32
+	Stock  Stock
+	Prices []PriceAtTime
+}
+
+type PriceAtTime struct {
+	Price float32
+	Time time.Time
 }
