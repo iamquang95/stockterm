@@ -39,7 +39,7 @@ type dataStruct struct {
 	Data struct {
 		Hits []struct {
 			Source struct {
-				Last   float32 `json:"last"`
+				Last   float64 `json:"last"`
 				Symbol string  `json:"symbol"`
 				Time   string  `json:"time"`
 			} `json:"_source"`

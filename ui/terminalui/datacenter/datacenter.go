@@ -20,6 +20,14 @@ func (dc *StockDataCenter) GetStockList() []schema.StockToday {
 	return res
 }
 
+func (dc *StockDataCenter) GetStockDetail(code string) (*schema.StockToday, error) {
+	res, ok := dc.stockList[code]
+	if !ok {
+		return nil, fmt.Errorf("data center don't have data for %s", code)
+	}
+	return res, nil
+}
+
 func NewStockDataCenter(watchingStocks []string) (DataCenter, error) {
 	dc := &StockDataCenter{
 		stockList:      make(map[string]*schema.StockToday),

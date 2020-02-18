@@ -4,10 +4,10 @@ import "time"
 
 type Stock struct {
 	Name       string  `json:"a"`
-	OpenPrice  float32 `json:"b"`
-	CeilPrice  float32 `json:"c"`
-	FloorPrice float32 `json:"d"`
-	Price      float32 `json:"l"`
+	OpenPrice  float64 `json:"b"`
+	CeilPrice  float64 `json:"c"`
+	FloorPrice float64 `json:"d"`
+	Price      float64 `json:"l"`
 }
 
 type StockToday struct {
@@ -16,6 +16,6 @@ type StockToday struct {
 }
 
 type PriceAtTime struct {
-	Price float32
+	Price float64
 	Time time.Time
 }

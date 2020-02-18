@@ -33,6 +33,8 @@ func GetLastTradeDayStockDetail(code string) ([]schema.PriceAtTime, error) {
 		t = t.AddDate(0, 0, -2)
 	} else if t.Weekday() == time.Saturday {
 		t = t.AddDate(0, 0, -1)
+	} else if t.Hour() <= 9 {
+		t = t.AddDate(0, 0, -1)
 	}
 	resp, err := getStockDetail(code, t)
 	if err != nil {
