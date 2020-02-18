@@ -17,10 +17,8 @@ type MainApp struct {
 }
 
 func (app *MainApp) react() {
-	defer ui.Close()
-
 	uiEvents := ui.PollEvents()
-	ticker := time.NewTicker(time.Second).C
+	ticker := time.NewTicker(10 * time.Second).C
 	for {
 		select {
 		case e := <-uiEvents:
@@ -43,28 +41,38 @@ func (app *MainApp) react() {
 	}
 }
 
-func Render() {
-	app := initMainApp([]string{"VRE", "MSN", "ITA", "CTG"})
-	app.react()
-}
-
-func initMainApp(watchingStocks []string) *MainApp {
+func Render() error {
 	if err := ui.Init(); err != nil {
 		log.Fatalf("failed to initialize terminalui: %v", err)
 	}
-	dc := datacenter.NewStockDataCenter(watchingStocks)
-	stockList := widget.NewStockListWidget()
-	widgets := []widget.Widget{stockList}
-	for _, w := range widgets {
-		w.UpdateData(dc)
+	defer ui.Close()
+	app, err := initMainApp([]string{"VRE", "MSN", "ITA", "CTG"})
+	if err != nil {
+		return err
 	}
-	// ui.Render(stockList.GetWidget())
+	app.react()
+	return nil
+}
+
+func initMainApp(watchingStocks []string) (*MainApp, error) {
+
+	dc, err := datacenter.NewStockDataCenter(watchingStocks)
+	if err != nil {
+		return nil, err
+	}
+	widgets := []widget.Widget{}
+	for _, w := range widgets {
+		err := w.UpdateData(dc)
+		if err != nil {
+			return nil, err
+		}
+	}
 	grid := ui.NewGrid()
 	termWidth, termHeight := ui.TerminalDimensions()
 	grid.SetRect(0, 0, termWidth, termHeight)
 	grid.Set(
 		ui.NewRow(
-			1.0/2, ui.NewCol(1.0/3, stockList.GetWidget()),
+			1.0/2, ui.NewCol(1.0/3),
 		),
 	)
 	app := &MainApp{
@@ -73,5 +81,5 @@ func initMainApp(watchingStocks []string) *MainApp {
 		watchingStocks: watchingStocks,
 		grid:           grid,
 	}
-	return app
+	return app, nil
 }
