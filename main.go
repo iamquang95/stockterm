@@ -1,23 +1,22 @@
 package main
 
 import (
-	"fmt"
-	"github.com/iamquang95/stockterm/ui/terminalui/datacenter"
+	"github.com/iamquang95/stockterm/ui/terminalui"
 )
 
 func main() {
-	//terminalui.Render()
-	dc, err := datacenter.NewStockDataCenter([]string{"ITA"})
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(dc)
-	fmt.Println("----------------------------------")
-	err = dc.FetchData()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(dc.GetStockList())
+	terminalui.Render()
+	//dc, err := datacenter.NewStockDataCenter([]string{"ITA"})
+	//if err != nil {
+	//	panic(err)
+	//}
+	//fmt.Println(dc)
+	//fmt.Println("----------------------------------")
+	//err = dc.FetchData()
+	//if err != nil {
+	//	panic(err)
+	//}
+	//fmt.Println(dc.GetStockList())
 	// resp, err := crawler.GetHTML("http://banggia.cafef.vn/stockhandler.ashx")
 	// if err != nil {
 	// 	panic(err)

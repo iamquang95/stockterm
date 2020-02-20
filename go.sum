@@ -7,3 +7,9 @@ github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7 h1:DpOJ2HYzC
 github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7/go.mod h1:ZXFpozHsX6DPmq2I0TCekCxypsnAUbP2oI0UX1GXzOo=
 github.com/nsf/termbox-go v0.0.0-20190121233118-02980233997d h1:x3S6kxmy49zXVVyhcnrFqxvNVCBPb2KZ9hV2RBdS840=
 github.com/nsf/termbox-go v0.0.0-20190121233118-02980233997d/go.mod h1:IuKpRQcYE1Tfu+oAQqaLisqDeXgjyyltCfsaoYN18NQ=
+github.com/pdevine/termui v0.0.0-20200211192428-fc992098687a h1:BTk5EqCKQwqoCsyvfkGuDbOg/9kFSSpB4d7rAgGibVk=
+github.com/pdevine/termui v0.0.0-20200211192428-fc992098687a/go.mod h1:PjwfrbUo2L7IVgL7NBY91R8ZKm2/LX+PcsfPoGZ53zI=
+github.com/sivamgr/termui v3.1.0+incompatible h1:wsqrcw3t7A1TeeBCy37nD/WvsL3VWatyGggTojKgEzk=
+github.com/sivamgr/termui v3.1.0+incompatible/go.mod h1:lw6FrT/OYly+Ze9EFih56EBk9rJLIol4QF2UG2pd+9k=
+github.com/sivamgr/termui v3.1.1-0.20190728132711-5ab3aa566ffe+incompatible h1:DxboGVGcT5rjR3u74joO7gAcQ4LrztFutOUc2AbIN4w=
+github.com/sivamgr/termui v3.1.1-0.20190728132711-5ab3aa566ffe+incompatible/go.mod h1:lw6FrT/OYly+Ze9EFih56EBk9rJLIol4QF2UG2pd+9k=

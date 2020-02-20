@@ -2,14 +2,12 @@ package parser
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/iamquang95/stockterm/schema"
 	"sort"
 	"time"
 )
 
 func ParseInDayStockData(date time.Time, resp []byte) ([]schema.PriceAtTime, error) {
-	fmt.Println(string(resp))
 	data := &dataStruct{}
 	err := json.Unmarshal(resp, data)
 	if err != nil {
@@ -27,7 +25,6 @@ func ParseInDayStockData(date time.Time, resp []byte) ([]schema.PriceAtTime, err
 			Price: kv.Source.Last,
 			Time:  timestamp,
 		})
-		fmt.Println(kv.Source)
 	}
 	sort.Slice(res, func(l, r int) bool {
 		return res[l].Time.Before(res[r].Time)
