@@ -1,6 +1,7 @@
 package terminalui
 
 import (
+	"github.com/iamquang95/stockterm/core/config"
 	"log"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 )
 
 type MainApp struct {
+	conf           *config.Config
 	widgets        []widget.Widget
 	dataCenter     datacenter.DataCenter
 	watchingStocks []string
@@ -48,7 +50,11 @@ func Render() error {
 		log.Fatalf("failed to initialize terminalui: %v", err)
 	}
 	defer ui.Close()
-	app, err := initMainApp([]string{"VRE", "ITA", "HSG", "MSN"})
+	conf, err := config.GetConfig("config.json")
+	if err != nil {
+		return err
+	}
+	app, err := initMainApp(conf)
 	if err != nil {
 		return err
 	}
@@ -56,13 +62,13 @@ func Render() error {
 	return nil
 }
 
-func initMainApp(watchingStocks []string) (*MainApp, error) {
-	dc, err := datacenter.NewStockDataCenter(watchingStocks)
+func initMainApp(conf *config.Config) (*MainApp, error) {
+	dc, err := datacenter.NewStockDataCenter(conf.WatchingStocks)
 	if err != nil {
 		return nil, err
 	}
 	renderingWidgets := make([]widget.Widget, 0)
-	for _, code := range watchingStocks {
+	for _, code := range conf.WatchingStocks {
 		renderingWidgets = append(renderingWidgets, widget.NewStockPriceChart(code))
 	}
 	for _, w := range renderingWidgets {
@@ -103,9 +109,10 @@ func initMainApp(watchingStocks []string) (*MainApp, error) {
 		),
 	)
 	app := &MainApp{
+		conf:           conf,
 		widgets:        renderingWidgets,
 		dataCenter:     dc,
-		watchingStocks: watchingStocks,
+		watchingStocks: conf.WatchingStocks,
 		grid:           grid,
 	}
 	return app, nil

@@ -1,0 +1,30 @@
+{
+  "watchingStocks": [
+    "MSN",
+    "CTG",
+    "BID",
+    "FPT"
+  ],
+  "portfolio": [
+    {
+      "code": "MSN",
+      "noStocks": 15,
+      "buyPrice": 62.0
+    },
+    {
+      "code": "CTG",
+      "noStocks":170,
+      "buyPrice": 8.14
+    },
+    {
+      "code": "BID",
+      "noStocks": 800,
+      "buyPrice": 2.39
+    },
+    {
+      "code": "FPT",
+      "noStocks": 50,
+      "buyPrice": 33.2
+    }
+  ]
+}

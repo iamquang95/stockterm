@@ -5,7 +5,10 @@ import (
 )
 
 func main() {
-	terminalui.Render()
+	err := terminalui.Render()
+	if err != nil {
+		panic(err)
+	}
 	//dc, err := datacenter.NewStockDataCenter([]string{"ITA"})
 	//if err != nil {
 	//	panic(err)
