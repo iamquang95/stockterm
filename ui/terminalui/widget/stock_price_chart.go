@@ -66,9 +66,10 @@ func priceAtTimeToPlotData(stock *schema.StockToday) ([][]float64, float64, floa
 		Price: stock.Stock.OpenPrice,
 		Time:  time.Time{},
 	}
+	now := time.Now()
 	prices = append(stock.Prices, schema.PriceAtTime{
 		Price: 0,
-		Time:  time.Now().AddDate(0, 0, 15),
+		Time:  time.Date(now.Year(), now.Month(), now.Day(), 23, 59, 59, 1e9-1, time.UTC),
 	})
 
 	idx := 0
