@@ -36,9 +36,17 @@ func (w *StockPriceChart) UpdateData(dc datacenter.DataCenter) error {
 	if err != nil {
 		return err
 	}
-	prices, minVal, maxVal := priceAtTimeToPlotData(stockDetail)
+	prices, _, _ := priceAtTimeToPlotData(stockDetail)
 	w.plot.Data = prices
-	w.plot.MaxVal = maxVal - minVal
+	/* Don't know why color is applied to all charts
+	if stockDetail.Stock.Price < stockDetail.Stock.OpenPrice {
+		w.plot.LineColors[0] = ui.ColorRed
+	} else if stockDetail.Stock.Price > stockDetail.Stock.OpenPrice {
+		w.plot.LineColors[0] = ui.ColorGreen
+	} else {
+		w.plot.LineColors[0] = ui.ColorYellow
+	}
+	 */
 	return nil
 }
 
@@ -60,7 +68,7 @@ func priceAtTimeToPlotData(stock *schema.StockToday) ([][]float64, float64, floa
 	}
 	prices = append(stock.Prices, schema.PriceAtTime{
 		Price: 0,
-		Time:  time.Now().AddDate( 0, 0, 15),
+		Time:  time.Now().AddDate(0, 0, 15),
 	})
 
 	idx := 0
@@ -68,6 +76,7 @@ func priceAtTimeToPlotData(stock *schema.StockToday) ([][]float64, float64, floa
 	maxVal := float64(0)
 	minVal := 1e9
 	for i := 0; i < n; i++ {
+		res[1][i] = stock.Stock.OpenPrice
 		curTime := start + step*i
 		for idx < len(prices) && timeToInt(prices[idx].Time) <= curTime {
 			idx++
@@ -79,11 +88,6 @@ func priceAtTimeToPlotData(stock *schema.StockToday) ([][]float64, float64, floa
 		}
 		maxVal = math.Max(maxVal, res[0][i])
 		minVal = math.Min(minVal, res[0][i])
-	}
-	// Refined data
-	for i, _ := range res[0] {
-		res[0][i] -= minVal
-		res[1][i] = stock.Stock.OpenPrice - minVal
 	}
 	return res, minVal, maxVal
 }

@@ -48,7 +48,7 @@ func Render() error {
 		log.Fatalf("failed to initialize terminalui: %v", err)
 	}
 	defer ui.Close()
-	app, err := initMainApp([]string{"VRE", "MSN", "ITA", "HSG"})
+	app, err := initMainApp([]string{"VRE", "ITA", "HSG", "MSN"})
 	if err != nil {
 		return err
 	}
