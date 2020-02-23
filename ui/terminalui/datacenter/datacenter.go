@@ -12,12 +12,8 @@ type StockDataCenter struct {
 	watchingStocks []string
 }
 
-func (dc *StockDataCenter) GetStockList() []schema.StockToday {
-	res := make([]schema.StockToday, 0)
-	for _, kv := range dc.stockList {
-		res = append(res, *kv)
-	}
-	return res
+func (dc *StockDataCenter) GetStockList() map[string]*schema.StockToday {
+	return dc.stockList
 }
 
 func (dc *StockDataCenter) GetStockDetail(code string) (*schema.StockToday, error) {

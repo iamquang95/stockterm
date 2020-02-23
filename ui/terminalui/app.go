@@ -6,7 +6,6 @@ import (
 	"time"
 
 	ui "github.com/gizak/termui/v3"
-	"github.com/gizak/termui/v3/widgets"
 	"github.com/iamquang95/stockterm/ui/terminalui/datacenter"
 	"github.com/iamquang95/stockterm/ui/terminalui/widget"
 )
@@ -68,6 +67,13 @@ func initMainApp(conf *config.Config) (*MainApp, error) {
 		return nil, err
 	}
 	renderingWidgets := make([]widget.Widget, 0)
+
+	p, err := widget.NewStockPortfolio(dc, conf)
+	if err != nil {
+		return nil, err
+	}
+	renderingWidgets = append(renderingWidgets, p)
+
 	for _, code := range conf.WatchingStocks {
 		renderingWidgets = append(renderingWidgets, widget.NewStockPriceChart(code))
 	}
@@ -80,8 +86,6 @@ func initMainApp(conf *config.Config) (*MainApp, error) {
 	grid := ui.NewGrid()
 	termWidth, termHeight := ui.TerminalDimensions()
 
-	p := widgets.NewParagraph()
-	p.Title = "Portfolio"
 
 	grid.SetRect(0, 0, termWidth, termHeight)
 	grid.Set(
@@ -89,20 +93,20 @@ func initMainApp(conf *config.Config) (*MainApp, error) {
 			1.0,
 			ui.NewCol(
 				1.0/3,
-				ui.NewCol(1.0, p),
+				ui.NewCol(1.0, p.GetWidget()),
 			),
 			ui.NewCol(
 				2.0/3,
 				ui.NewRow(
 					1.0/2,
-					ui.NewCol(1.0/2, renderingWidgets[0].GetWidget()),
 					ui.NewCol(1.0/2, renderingWidgets[1].GetWidget()),
+					ui.NewCol(1.0/2, renderingWidgets[2].GetWidget()),
 
 				),
 				ui.NewRow(
 					1.0/2,
-					ui.NewCol(1.0/2, renderingWidgets[2].GetWidget()),
 					ui.NewCol(1.0/2, renderingWidgets[3].GetWidget()),
+					ui.NewCol(1.0/2, renderingWidgets[4].GetWidget()),
 
 				),
 			),
