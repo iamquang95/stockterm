@@ -8,7 +8,7 @@ import (
 )
 
 func ParseInDayStockData(date time.Time, resp []byte) ([]schema.PriceAtTime, error) {
-	data := &dataStruct{}
+	data := &inDayDataStruct{}
 	err := json.Unmarshal(resp, data)
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func ParseInDayStockData(date time.Time, resp []byte) ([]schema.PriceAtTime, err
 	return res, nil
 }
 
-type dataStruct struct {
+type inDayDataStruct struct {
 	Data struct {
 		Hits []struct {
 			Source struct {
@@ -42,4 +42,35 @@ type dataStruct struct {
 			} `json:"_source"`
 		} `json:"hits"`
 	} `json:"data"`
+}
+
+func ParseOneYearStockData(resp []byte) ([]schema.PriceAtTime, error) {
+	data := &oneYearDataStruct{}
+	err := json.Unmarshal(resp, data)
+	if err != nil {
+		return nil, err
+	}
+	res := make([]schema.PriceAtTime, 0)
+	for i := 0; i < min(len(data.Epochs), len(data.Prices)); i = i + 1 {
+		res = append(res, schema.PriceAtTime{
+			Price: data.Prices[i],
+			Time:  time.Unix(data.Epochs[i], 0),
+		})
+	}
+	sort.Slice(res, func(l, r int) bool {
+		return res[l].Time.Before(res[r].Time)
+	})
+	return res, nil
+}
+
+type oneYearDataStruct struct {
+	Epochs []int64   `json:"t"`
+	Prices []float64 `json:"c"`
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }

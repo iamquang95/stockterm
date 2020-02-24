@@ -8,8 +8,13 @@ import (
 )
 
 type StockDataCenter struct {
-	stockList      map[string]*schema.StockToday
-	watchingStocks []string
+	stockList        map[string]*schema.StockToday
+	oneYearStockList map[string][]schema.PriceAtTime
+	watchingStocks   []string
+}
+
+func (dc *StockDataCenter) GetOneYearStockList() map[string][]schema.PriceAtTime {
+	return dc.oneYearStockList
 }
 
 func (dc *StockDataCenter) GetStockList() map[string]*schema.StockToday {
@@ -26,8 +31,9 @@ func (dc *StockDataCenter) GetStockDetail(code string) (*schema.StockToday, erro
 
 func NewStockDataCenter(watchingStocks []string) (DataCenter, error) {
 	dc := &StockDataCenter{
-		stockList:      make(map[string]*schema.StockToday),
-		watchingStocks: watchingStocks,
+		stockList:        make(map[string]*schema.StockToday),
+		oneYearStockList: make(map[string][]schema.PriceAtTime),
+		watchingStocks:   watchingStocks,
 	}
 	err := dc.initData()
 	return dc, err
@@ -59,6 +65,11 @@ func (dc *StockDataCenter) FetchData() error {
 				Time:  time.Now(),
 			})
 		}
+		oneYearStat := dc.oneYearStockList[stock]
+		dc.oneYearStockList[stock][len(oneYearStat)-1] = schema.PriceAtTime{
+			Price: newStock.Price,
+			Time:  time.Now(),
+		}
 	}
 	return nil
 }
@@ -87,6 +98,8 @@ func (dc *StockDataCenter) initData() error {
 			Stock:  stocks[code],
 			Prices: data,
 		}
+		data, err = crawler.GetOneYearStockPrice(code)
+		dc.oneYearStockList[code] = data
 	}
 	return nil
 }

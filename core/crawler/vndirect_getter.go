@@ -43,3 +43,20 @@ func GetLastTradeDayStockDetail(code string) ([]schema.PriceAtTime, error) {
 	res, err := parser.ParseInDayStockData(t, resp)
 	return res, err
 }
+
+func GetOneYearStockPrice(code string) ([]schema.PriceAtTime, error) {
+	cur := time.Now().Unix()
+	prev := time.Now().AddDate(-1, 0, 0).Unix()
+	url := fmt.Sprintf(
+		"https://dchart-api.vndirect.com.vn/dchart/history?resolution=D&symbol=%s&from=%d&to=%d",
+		code,
+		prev,
+		cur,
+	)
+	data, err := GetHTML(url)
+	if err != nil {
+		return nil, err
+	}
+	res, err := parser.ParseOneYearStockData(data)
+	return res, err
+}

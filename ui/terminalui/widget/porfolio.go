@@ -12,6 +12,7 @@ type StockPortfolio struct {
 	stocks []config.Portfolio
 	p      *widgets.Paragraph
 	t      *widgets.Table
+	oneYearPortfolioChart Widget
 }
 
 func NewStockPortfolio(dc datacenter.DataCenter, conf *config.Config) (*StockPortfolio, error) {
@@ -24,10 +25,17 @@ func NewStockPortfolio(dc datacenter.DataCenter, conf *config.Config) (*StockPor
 	t.Title = "Stock prices"
 	t.SetRect(0, 0, 60, 10)
 
+	portfolioChart := NewOneYearPortfolioChart(conf)
+	err := portfolioChart.UpdateData(dc)
+	if err != nil {
+		return nil, err
+	}
+
 	stockPortfolio := &StockPortfolio{
 		stocks: conf.Portfolio,
 		p:      p,
 		t:      t,
+		oneYearPortfolioChart: portfolioChart,
 	}
 	stockPortfolio.updatePortfolioTable(dc, conf.Portfolio)
 	return stockPortfolio, nil
@@ -104,13 +112,16 @@ func getColorBasedOnProfit(profit float64) ui.Style {
 func (s *StockPortfolio) GetWidget() ui.Drawable {
 	grid := ui.NewGrid()
 	grid.Set(
-		ui.NewRow(1.0/4, ui.NewCol(1, s.p)),
+		ui.NewRow(1.0/5, ui.NewCol(1, s.p)),
 		ui.NewRow(1.0/2, ui.NewCol(1, s.t)),
+		ui.NewRow(3.0/10, ui.NewCol(1, s.oneYearPortfolioChart.GetWidget())),
 	)
 	return grid
 }
 
 func (s *StockPortfolio) UpdateData(dc datacenter.DataCenter) error {
 	s.p.Text = newBalancePara(dc, s.stocks)
-	return nil
+	s.updatePortfolioTable(dc, s.stocks)
+	err := s.oneYearPortfolioChart.UpdateData(dc)
+	return err
 }
