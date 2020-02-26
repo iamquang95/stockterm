@@ -5,6 +5,8 @@
 
 StockTerm is a reactive stock portfolio observer.
 
+The screen shot was taken on a bad day :( The 2019-nCoV is destroying the market.
+
 ## How to use
 Just simply copy `sample.config.json` to `config.json` at the same level with `main.go`
 Then run `go run *.go`
