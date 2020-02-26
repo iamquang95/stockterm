@@ -74,6 +74,7 @@ func initMainApp(conf *config.Config) (*MainApp, error) {
 	}
 	renderingWidgets = append(renderingWidgets, p)
 
+	// TODO: Watching stocks size may larger than 4
 	for _, code := range conf.WatchingStocks {
 		renderingWidgets = append(renderingWidgets, widget.NewStockPriceChart(code))
 	}
