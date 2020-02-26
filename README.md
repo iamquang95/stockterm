@@ -1,7 +1,7 @@
 
 # StockTerm
 
-![demo-img](https://raw.githubusercontent.com/iamquang95/stockterm/blob/master/resource/demo_screen.png)
+![demo-img](https://raw.githubusercontent.com/iamquang95/stockterm/master/resource/demo_screen.png)
 
 StockTerm is a reactive stock portfolio observer.
 
